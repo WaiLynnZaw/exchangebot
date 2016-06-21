@@ -26,7 +26,8 @@ app.post('/webhook', function (req, res) {
     for (i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
-            sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
+            // sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
+            exchangeRateMessage(event.sender.id,event.message.text);
         }
     }
     res.sendStatus(200);
@@ -48,4 +49,26 @@ function sendMessage(recipientId, message) {
             console.log('Error: ', response.body.error);
         }
     });
+};
+
+function exchangeRateMessage(recipientId, text) {
+
+  text = text || "";
+  var values = text.split(' ');
+  var message = "";
+  if (values.length === 2 && values[0] === 'USD') {
+    if (Number(values[1]) > 0 ) {
+      var api_url = "http://forex.cbm.gov.mm/api/latest";
+      request(api_url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          var data = JSON.parse(body);
+          message = data["info"];
+        }else{
+          res.status(401).json({"message":"Session Expired"});
+        }
+      });
+      sendMessage(recipientId, message);
+      return true;
+    }
+  }
 };
