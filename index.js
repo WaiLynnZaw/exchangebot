@@ -63,7 +63,7 @@ function exchangeRateMessage(recipientId, text) {
       request(api_url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           var data = JSON.parse(body);
-          sendMessage(recipientId, {text: "Echo: " + data});
+          sendMessage(recipientId, {text: "MMK: " + data['info']});
         }else{
           res.status(401).json({"message":"Session Expired"});
         }
