@@ -27,7 +27,7 @@ app.post('/webhook', function (req, res) {
     var event = events[i];
     if (event.message && event.message.text) {
       if (!exchangeRateMessage(event.sender.id, event.message.text)) {
-        sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
+        sendMessage(event.sender.id, {text: "Hello, " + event.sender.name + "You can easily know the exchange rates to MMK by simply sending currency and amount (e.g send: USD 1)"});
       }
     } else if (event.postback) {
       console.log("Postback received: " + JSON.stringify(event.postback));
