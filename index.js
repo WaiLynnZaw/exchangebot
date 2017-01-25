@@ -65,7 +65,9 @@ function exchangeRateMessage(recipientId, text) {
           var rates = data['rates'];
           var currency = rates[values[0]];
           currency = currency.replace (/,/g, "");
-          sendMessage(recipientId, {text: "MMK: " + parseFloat(currency)*values[1]});
+          var mResult = parseFloat(currency)*values[1];
+          var num = '$' + mResult.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+          sendMessage(recipientId, {text: "MMK: " + num});
         }else{
           res.status(401).json({"message":"Session Expired"});
         }
